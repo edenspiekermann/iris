@@ -1,0 +1,7 @@
+{
+  "javascript": {
+    "main": "http://localhost:8080/dist/client.js"
+  },
+  "styles": {},
+  "assets": {}
+}
