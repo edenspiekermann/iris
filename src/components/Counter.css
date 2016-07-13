@@ -1,4 +1,5 @@
 .hello {
   color: blue;
   font-size: 30px;
+  display: flex;
 }

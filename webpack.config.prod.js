@@ -2,6 +2,45 @@ var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+var plugins = [
+  new webpack.DefinePlugin({
+    __CLIENT__: true,
+    __SERVER__: false,
+    __DEVELOPMENT__: false,
+    __DEVTOOLS__: false,
+
+    'process.env': {
+      NODE_ENV: 'production'
+    }
+  }),
+  new webpack.optimize.UglifyJsPlugin({
+    compress: {
+      warnings: false
+    }
+  }),
+  new webpack.optimize.DedupePlugin(),
+  new webpack.optimize.OccurenceOrderPlugin(),
+  new ExtractTextPlugin('styles.css')
+];
+
+var cssLoader = 'css?modules&importLoaders=2&sourceMap&localIdentName=[name]__[local]___[hash:base64:5]';
+
+var loaders = [
+  {
+    include: /\.json$/,
+    loader: 'json'
+  },
+  {
+    include: /\.jsx?/,
+    loader: 'babel',
+    exclude: /node_modules/
+  },
+  {
+    test: /\.css$/,
+    loader: ExtractTextPlugin.extract('style', cssLoader)
+  }
+];
+
 module.exports = {
   entry: ['./src/client'],
   target: 'web',
@@ -14,45 +53,9 @@ module.exports = {
     chunkFilename: '[name]-[id].js',
     publicPath: 'dist/'
   },
-  plugins: [
-    new ExtractTextPlugin('styles.css'),
-    new webpack.DefinePlugin({
-      __CLIENT__: true,
-      __SERVER__: false,
-      __DEVELOPMENT__: false,
-      __DEVTOOLS__: false,
-
-      'process.env': {
-        NODE_ENV: 'production'
-      }
-    }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    })
-  ],
+  plugins: plugins,
   module: {
-    loaders: [
-      {
-        include: /\.json$/,
-        loader: 'json'
-      },
-      {
-        include: /\.jsx?/,
-        loader: 'babel',
-        exclude: /node_modules/
-      },
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract(
-          'style',
-          'css?modules&importLoaders=2&sourceMap&localIdentName=[name]__[local]___[hash:base64:5]'
-        )
-      }
-    ]
+    loaders: loaders
   },
   resolve: {
     modulesDirectories: [
@@ -65,5 +68,6 @@ module.exports = {
   node: {
     __dirname: true,
     fs: 'empty'
-  }
+  },
+  cssLoader: cssLoader
 };
