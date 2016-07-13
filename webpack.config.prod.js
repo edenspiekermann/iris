@@ -2,6 +2,13 @@ var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+var cssLoader = [
+  'css?modules',
+  'importLoaders=2',
+  'sourceMap',
+  'localIdentName=[name]__[local]___[hash:base64:5]'
+].join('&');
+
 var plugins = [
   new webpack.DefinePlugin({
     __CLIENT__: true,
@@ -22,8 +29,6 @@ var plugins = [
   new webpack.optimize.OccurenceOrderPlugin(),
   new ExtractTextPlugin('styles.css')
 ];
-
-var cssLoader = 'css?modules&importLoaders=2&sourceMap&localIdentName=[name]__[local]___[hash:base64:5]';
 
 var loaders = [
   {
@@ -54,9 +59,7 @@ module.exports = {
     publicPath: 'dist/'
   },
   plugins: plugins,
-  module: {
-    loaders: loaders
-  },
+  module: { loaders: loaders },
   resolve: {
     modulesDirectories: [
       'src',
@@ -69,5 +72,6 @@ module.exports = {
     __dirname: true,
     fs: 'empty'
   },
+  // stash here to access it easily in config.dev
   cssLoader: cssLoader
 };

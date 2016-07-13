@@ -32,7 +32,7 @@ var loaders = [
 config.cache = true;
 config.debug = true;
 config.devtool = 'eval';
-
+config.devServer = devServer;
 config.entry.unshift(
   'webpack-dev-server/client?http://localhost:8080',
   'webpack/hot/only-dev-server'
@@ -41,8 +41,8 @@ config.entry.unshift(
 config.output.publicPath = 'http://localhost:8080/dist/';
 config.output.hotUpdateMainFilename = 'update/[hash]/update.json';
 config.output.hotUpdateChunkFilename = 'update/[hash]/[id].update.js';
+
 config.plugins = plugins;
 config.module = { loaders: loaders };
-config.devServer = devServer;
 
 module.exports = config;
