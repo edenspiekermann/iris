@@ -1,9 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-// https://github.com/halt-hammerzeit/webpack-isomorphic-tools
-var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
-var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack.isomorphic-tools'));
 
 module.exports = {
   entry: ['./src/client'],
@@ -18,7 +15,7 @@ module.exports = {
     publicPath: 'dist/'
   },
   plugins: [
-    new ExtractTextPlugin('[name]-[hash].css', {allChunks: true}),
+    new ExtractTextPlugin('styles.css'),
     new webpack.DefinePlugin({
       __CLIENT__: true,
       __SERVER__: false,
@@ -35,8 +32,7 @@ module.exports = {
       compress: {
         warnings: false
       }
-    }),
-    webpackIsomorphicToolsPlugin
+    })
   ],
   module: {
     loaders: [
@@ -50,8 +46,11 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=2&sourceMap!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap=true&sourceMapContents=true')
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract(
+          'style',
+          'css?modules&importLoaders=2&sourceMap&localIdentName=[name]__[local]___[hash:base64:5]'
+        )
       }
     ]
   },
