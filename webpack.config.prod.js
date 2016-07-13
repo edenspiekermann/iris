@@ -48,7 +48,6 @@ var loaders = [
 
 module.exports = {
   entry: ['./src/client'],
-  target: 'web',
   cache: false,
   context: __dirname,
   devtool: false,

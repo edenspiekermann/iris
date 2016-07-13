@@ -5,17 +5,15 @@
   "main": "babel.server.js",
   "scripts": {
     "clean": "rm -rf static/dist",
-    "kill": "node ./node_modules/concurrently/src/main.js --kill-others",
-    "build:prod": "webpack --colors --display-error-details --config webpack.config.prod.js",
-    "build:dev": "webpack --colors --display-error-details --config webpack.config.dev.js",
-    "server:prod": "NODE_PATH=\"./src\" node ./babel.server",
-    "server:dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.config.dev.js",
+    "build": "webpack --colors --verbose --display-error-details --config webpack.config.prod.js",
+    "server": "NODE_PATH=\"./src\" node ./babel.server",
+    "devserver": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.config.dev.js",
     "lint:all": "semistandard --verbose | snazzy",
     "lint:staged": "git diff --name-only --staged --diff-filter=ACMTUXB --relative | grep -E '.jsx?$' | xargs semistandard --verbose | snazzy",
     "postinstall": "webpack -p --config ./webpack.config.prod.js",
-    "test": "npm run lint:all",
-    "start": "npm run server:prod",
-    "dev": "npm run clean && npm run kill \"npm run build:prod\" \"npm run server:dev\" \"npm run start\""
+    "start": "npm run server",
+    "dev": "npm run clean && npm run build && concurrently --kill-others \"npm run devserver\" \"npm run start\"",
+    "test": "npm run lint:all"
   },
   "author": "Edenspiekermann",
   "license": "ISC",
